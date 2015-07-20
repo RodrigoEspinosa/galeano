@@ -1,0 +1,37 @@
+.background-wrapper {
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.background {
+  height: 100%;
+  left: 0;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  transition: all 2s;
+  width: 100%;
+}
+
+.background.active { opacity: 1; }
+
+.background-simple {
+  background: whitesmoke;
+}
+
+.background-color-therapy {
+  @keyframes ColorTherapyBackgroundAnimation {
+    0% { background-position: 0% 99% }
+    50% { background-position: 100% 2% }
+    100% { background-position: 0% 99% }
+  }
+
+  animation: ColorTherapyBackgroundAnimation 10s ease infinite;
+  background-size: 1000% 1000%;
+  background: linear-gradient(230deg, #630054, #D8568A, #F87E80, #FD9872, #F3C367);
+}

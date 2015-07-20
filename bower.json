@@ -1,0 +1,16 @@
+{
+  "name": "galeano",
+  "main": "index.js",
+  "version": "0.0.0",
+  "authors": [
+    "rec"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

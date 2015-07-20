@@ -1,0 +1,51 @@
+.menus {
+  margin: 60px 0;
+  position: fixed;
+  width: 600px;
+  left: 80%;
+}
+
+.menu-options {
+  display: block;
+  margin: 0;
+  padding: 0;
+
+  .settings-setter {
+    background: #65aaaa;
+    border-radius: 25px;
+    border: 2px solid #86dada;
+    display: inline-block;
+    height: 20px;
+    margin: 4px 2px 0 0;
+    opacity: 0;
+    transition: opacity 250ms;
+    width: 20px;
+
+    &:first-of-type {
+      margin-top: 0;
+      opacity: .8;
+    }
+
+  }
+
+  &:hover .settings-setter {
+    opacity: .6;
+
+    &:first-of-type {
+      opacity: 1;
+    }
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.menu-options .settings-setter[data-set-background="simple"] {
+  background: whitesmoke;
+  border-color: #999;
+}
+
+.menu-options .settings-setter[data-set-background="color-therapy"] {
+  background: linear-gradient(230deg, #630054, #D8568A, #F87E80, #FD9872, #F3C367);
+  border-color: white;
+}

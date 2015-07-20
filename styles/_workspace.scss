@@ -1,0 +1,18 @@
+.workspace {
+  height: 100vh;
+  padding: 60px 10px;
+  width: 100%;
+}
+
+.preview {
+  display: none;
+}
+
+.workspace.display-preview .editor,
+.workspace.display-preview .preview {
+  background: whitesmoke;
+  border: 1px solid #616161;
+  height: 100%;
+  margin: 0;
+  width: 50%;
+}
