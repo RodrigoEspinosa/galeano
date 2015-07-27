@@ -45,7 +45,28 @@
   border-color: #999;
 }
 
+.menu-options .settings-setter[data-set-background="sand"] {
+  background: linear-gradient(230deg, #FCFFF5, #D1DBBD, #91AA9D, #3E606F, #193441);
+  border-color: white;
+}
+
 .menu-options .settings-setter[data-set-background="color-therapy"] {
   background: linear-gradient(230deg, #630054, #D8568A, #F87E80, #FD9872, #F3C367);
   border-color: white;
+}
+
+.menu-options .settings-setter[data-set-background-track] {
+  background: white;
+}
+.menu-options .settings-setter[data-set-background-track="2"] {
+  background: white;
+  border-color: #D8568A;
+}
+.menu-options .settings-setter[data-set-background-track="3"] {
+  background: white;
+  border-color: #F87E80;
+}
+.menu-options .settings-setter[data-set-background-track="null"] {
+  background: #FD9872;
+  border-color: #FD9872;
 }

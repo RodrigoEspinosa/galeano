@@ -1,7 +1,6 @@
 (function() {
   'use strict';
 
-  const $ = require('jquery');
   const Path = require('path');
   const remote = require('remote');
 
@@ -18,26 +17,21 @@
   const Editor = requireLocal('editor');
 
   // Initialize the manager for the key-pressing sounds.
-  requireLocal('type-sound-manager');
+  const typeSound = requireLocal('type-sound-manager');
+
+  requireLocal('backgrounds');
 
   // Initialize the manager for background tracks.
   const backgroundTrack = requireLocal('background-track-manager');
 
-  new Menu.SettingsMenuItem('backgrounds', {
-    'background': 'simple',
-    'editor-schema': 'galeano'
-  });
-  new Menu.SettingsMenuItem('backgrounds', {
-    'background': 'color-therapy',
-    'editor-schema': 'galeano-dark'
-  });
-
-  $(document).on('ready', function() {
+  document.addEventListener('DOMContentLoaded', function() {
     // Trigger the `change background track` event for initialize.
-    // backgroundTrack.emit('change');
+    backgroundTrack.emit('change');
 
+    // Focus on the editor.
     Editor.focus();
 
+    // Render the side menu.
     Menu.render();
   });
 

@@ -24,14 +24,27 @@
   background: whitesmoke;
 }
 
-.background-color-therapy {
-  @keyframes ColorTherapyBackgroundAnimation {
-    0% { background-position: 0% 99% }
-    50% { background-position: 100% 2% }
-    100% { background-position: 0% 99% }
-  }
+.background-mountains-light {
+  background-image: url('../media/backgrounds/6894141-blurred.jpg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 
-  animation: ColorTherapyBackgroundAnimation 10s ease infinite;
-  background-size: 1000% 1000%;
-  background: linear-gradient(230deg, #630054, #D8568A, #F87E80, #FD9872, #F3C367);
+@keyframes MovingBackgroundColorAnimation {
+  0% { background-position: 0% 99% }
+  50% { background-position: 100% 2% }
+  100% { background-position: 0% 99% }
+}
+
+.background-sand {
+  animation: MovingBackgroundColorAnimation 20s ease infinite;
+  background-image: linear-gradient(230deg, #FCFFF5, #D1DBBD, #91AA9D, #3E606F, #193441);
+  background-size: 150% 150%;
+}
+
+.background-color-therapy {
+  animation: MovingBackgroundColorAnimation 30s ease infinite;
+  background-image: linear-gradient(230deg, #630054, #D8568A, #F87E80, #FD9872, #F3C367);
+  background-size: 150% 150%;
 }

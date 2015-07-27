@@ -3,13 +3,71 @@
 // const Menu = remote.require('menu');
 // const MenuItem = remote.require('menu-item');
 
+const remote = require('remote');
+const Menu = remote.require('menu');
+const menuTemplate = requireLocal('menu-template');
+
+const menu = Menu.buildFromTemplate(menuTemplate);
+Menu.setApplicationMenu(menu);
+
 // Create an ordered list of menu items.
 const MENU_REFERENCES = new Map([
   ['backgrounds', []],
   ['background-tracks', []]
 ]);
 
-const Editor = requireLocal('editor');
+// Mantain a list of events for each menu section.
+const REGISTERED_EVENTS = new Map([
+  ['backgrounds', new Map()],
+  ['background-tracks', new Map()]
+]);
+
+/**
+ * Get all the HTML elements for a specific section.
+ * @private
+ * @param  {string} section Section name.
+ * @return {array}          Array with the elements.
+ */
+const settingsSection = function(section) {
+  return MENU_REFERENCES.get(section).map(function(elem) {
+    return elem.toHTML();
+  });
+};
+
+/**
+ * Render menu helper that renders a specific section.
+ * @private
+ * @param  {string} section       Menu section (like `backgrounds`).
+ * @param  {object} parentElement Dom element.
+ */
+const renderSection = function(section, parentElement) {
+  // Iterate over all the created menu elements in the system.
+  for (let elem of settingsSection(section)) {
+    // Append the current element to the parent section element.
+    parentElement.appendChild(elem);
+
+    // Iterate over all the registered event for this type of node.
+    for (let registeredEvents of REGISTERED_EVENTS.get(section)) {
+      // Add the current event listener to the just appended node.
+      elem.addEventListener(registeredEvents[0], registeredEvents[1], false);
+    }
+  }
+}
+
+/**
+ * Render the menu with all the elements.
+ */
+const renderMenu = function() {
+  // Get all the parent elements for each section in the menu.
+
+  let backgroundSettingsElement = document.getElementById('background-settings');
+  let trackSettingsElement = document.getElementById('background-track-settings');
+
+  // Render each menu section. It will also add registered events listeners.
+
+  renderSection('backgrounds', backgroundSettingsElement);
+  renderSection('background-tracks', trackSettingsElement);
+};
 
 class SettingsMenuItem {
 
@@ -47,65 +105,20 @@ class SettingsMenuItem {
 }
 
 /**
- * Get all the HTML elements for a specific section.
- * @private
- * @param  {string} section Section name.
- * @return {array}          Array with the elements.
+ * Register an event handler to menu section.
+ * @param  {string}   section Menu section (like `backgrounds`).
+ * @param  {string}   action  Event to be handled (like `click`).
+ * @param  {function} handler Function to be called when event happens.
  */
-const settingsSection = function(section) {
-  return MENU_REFERENCES.get(section).map(function(elem) {
-    return elem.toHTML();
-  });
-}
-
-/**
- * Handle the on click on `background change button` event.
- * @private
- */
-const backgroundSettingOnClick = function() {
-  // Get the background.
-  let backgrounds = document.getElementsByClassName('background');
-
-  // Get the wanted background class name.
-  let selectedBackgroundClassName = 'background-' + this.getAttribute('data-set-background');
-
-  // Iterate over all the backgrounds.
-  for (let i = 0; i < backgrounds.length; i++) {
-    // Get the current background been iterated.
-    let background = backgrounds[i];
-    // Check if the current background is the wanted one.
-    let isWantedBackground = background.classList.contains(selectedBackgroundClassName);
-    // Remove the 'active' class if the background is not wanted and add it if it is.
-    background.classList.toggle('active', isWantedBackground);
-  }
-
-  let editorSchema = this.getAttribute('data-set-editor-schema');
-
-  if (editorSchema === 'galeano-dark') {
-    Editor.setOption('theme', 'galeano-dark');
-  } else {
-    Editor.setOption('theme', 'galeano');
-  }
+const eventRegister = function(section, action, handler) {
+  let events = REGISTERED_EVENTS.get(section);
+  events.set(action, handler);
 };
 
-/**
- * Render the menu with all the elements.
- */
-const renderMenu = function() {
-  let backgroundSettingsElement = document.getElementById('background-settings');
-  let trackSettingsElement = document.getElementById('background-track-settings');
+// Export the public API.
 
-  for (let elem of settingsSection('backgrounds')) {
-    backgroundSettingsElement.appendChild(elem);
-    elem.addEventListener('click', backgroundSettingOnClick, false);
-  }
-
-  for (let elem of settingsSection('background-tracks')) {
-    trackSettingsElement.appendChild(elem);
-  }
+module.exports = {
+  'render': renderMenu,
+  'eventRegister': eventRegister,
+  'SettingsMenuItem': SettingsMenuItem
 };
-
-// Exports.
-
-module.exports.render = renderMenu;
-module.exports.SettingsMenuItem = SettingsMenuItem;

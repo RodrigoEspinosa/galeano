@@ -15,7 +15,16 @@ app.on('ready', function () {
 
   var win = new BrowserWindow(_.merge(browserSize, {
     'frame': true,
-    'resizible': true
+    'resizible': true,
+    'preload': true,
+    'auto-hide-menu-bar': true,
+    'web-preferences': {
+      'javascript': true,
+      'images': true,
+      'direct-write': true,
+      'experimental-features': true,
+      'subpixel-font-scaling': true
+      }
   }));
 
   win.on('closed', function () {

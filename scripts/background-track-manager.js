@@ -1,6 +1,5 @@
 'use strict';
 
-const $ = require('jQuery');
 const _ = require('lodash');
 const Path = require('path');
 const Wad = require('../bower_components/wad/build/wad');
@@ -13,7 +12,7 @@ const TRACKS_DIR = Path.join(MEDIA_DIR, 'background-tracks');
 const backgroundTrackEvents = new (require('events')).EventEmitter();
 
 // Keep track of the current track if there is one.
-let currentTrack = null;
+let currentPlayingTrack = null;
 
 /**
  * Class for creating background tracks.
@@ -36,7 +35,9 @@ class BackgroundTrack {
         // Fade-in duration in seconds.
         attack: 3.0,
         // Track duration in seconds.
-        hold : 9001
+        hold : 9001,
+        // Fade-out duration in seconds.
+        release: 2.0
       }
     };
 
@@ -59,11 +60,27 @@ class BackgroundTrack {
 
 const backgroundTracksList = new Map();
 
-const blackStars = new BackgroundTrack(Path.join(TRACKS_DIR, 'mr_yo_so-black_stars.mp3'));
-backgroundTracksList.set('blackStars', blackStars);
+const track1 = new BackgroundTrack(Path.join(TRACKS_DIR, 'mr_yo_so-black_stars.mp3'));
+backgroundTracksList.set('1', track1);
+const track2 = new BackgroundTrack(Path.join(TRACKS_DIR, 'ambiente_de_campo_con_riachuelo.mp3'));
+backgroundTracksList.set('2', track2);
+const track3 = new BackgroundTrack(Path.join(TRACKS_DIR, 'sonic_mystery_-_deep_ocean.mp3'));
+backgroundTracksList.set('3', track3);
+
+// Create the menu.
 
 new Menu.SettingsMenuItem('background-tracks', {'background-track': null});
-new Menu.SettingsMenuItem('background-tracks', {'background-track': 'sand'});
+new Menu.SettingsMenuItem('background-tracks', {'background-track': '1'});
+new Menu.SettingsMenuItem('background-tracks', {'background-track': '2'});
+new Menu.SettingsMenuItem('background-tracks', {'background-track': '3'});
+
+Menu.eventRegister('background-tracks', 'click', function() {
+  let selectedBackgroundTrack = this.getAttribute('data-set-background-track');
+
+  Settings.set('BACKGROUND_TRACK', selectedBackgroundTrack);
+
+  backgroundTrackEvents.emit('change');
+});
 
 /**
  * Listen to the `on change background track` event.
@@ -78,8 +95,8 @@ backgroundTrackEvents.on('change', function() {
 
   // Stop the current track if there is any.
 
-  if (currentTrack) {
-    currentTrack.stop();
+  if (currentPlayingTrack) {
+    currentPlayingTrack.stop();
   }
 
   // Play the current track if this is on the list.
@@ -90,7 +107,7 @@ backgroundTrackEvents.on('change', function() {
     // Play the current track.
     currentBackgroundTrack.play();
     // Keep track of the current track.
-    currentTrack = currentBackgroundTrack;
+    currentPlayingTrack = currentBackgroundTrack;
   }
 
 });
